@@ -4,10 +4,10 @@
 #include <string.h>
 #include <time.h>
 
-// ÃÖ´ë ÀÔ·Â ¹öÆÛ Å©±â
+// ìµœëŒ€ ì…ë ¥ ë²„í¼ í¬ê¸°
 #define STRING_SIZE 256
 
-// -----------±âº» µ¥ÀÌÅÍ ±¸Á¶Ã¼------------
+// -----------ê¸°ë³¸ ë°ì´í„° êµ¬ì¡°ì²´------------
 typedef struct date
 {
     int year;
@@ -28,7 +28,7 @@ data d[100] = { 0 };
 //data d top size
 int size;
 
-/* ------------------------------------------------ÆÄÀÏ ÀÔÃâ·Â ºÎºĞ */
+/* ------------------------------------------------íŒŒì¼ ì…ì¶œë ¥ ë¶€ë¶„ */
 int check_array_size_in_txt(const char* txt)
 {
     int line = 0;
@@ -42,7 +42,7 @@ int check_array_size_in_txt(const char* txt)
             line++;
         }
     }
-    fclose(fp); // ÆÄÀÏ ´İ±â
+    fclose(fp); // íŒŒì¼ ë‹«ê¸°
     return line;
 }
 
@@ -67,13 +67,13 @@ void generate_random_data(data d[], int size)
     for (int i = 0; i < size; i++)
     {
         d[i].date.year = rand() % 100;
-        d[i].date.month = rand() % 12 + 1;  // 1ºÎÅÍ 12±îÁöÀÇ ¹«ÀÛÀ§ ¿ù
-        d[i].date.day = rand() % 30 + 1;    // 1ºÎÅÍ 30±îÁöÀÇ ¹«ÀÛÀ§ ÀÏ
+        d[i].date.month = rand() % 12 + 1;  // 1ë¶€í„° 12ê¹Œì§€ì˜ ë¬´ì‘ìœ„ ì›”
+        d[i].date.day = rand() % 30 + 1;    // 1ë¶€í„° 30ê¹Œì§€ì˜ ë¬´ì‘ìœ„ ì¼
 
-        d[i].money = rand() % 10000;  // 0ºÎÅÍ 9999±îÁöÀÇ ¹«ÀÛÀ§ ±İ¾×
+        d[i].money = rand() % 10000;  // 0ë¶€í„° 9999ê¹Œì§€ì˜ ë¬´ì‘ìœ„ ê¸ˆì•¡
 
-        sprintf(d[i].money_reason, "Reason %d", i + 1);  // "Reason 1", "Reason 2", ... ÇüÅÂÀÇ ¹®ÀÚ¿­
-        sprintf(d[i].str, "String %d", i + 1);  // "String 1", "String 2", ... ÇüÅÂÀÇ ¹®ÀÚ¿­
+        sprintf(d[i].money_reason, "Reason %d", i + 1);  // "Reason 1", "Reason 2", ... í˜•íƒœì˜ ë¬¸ìì—´
+        sprintf(d[i].str, "String %d", i + 1);  // "String 1", "String 2", ... í˜•íƒœì˜ ë¬¸ìì—´
     }
 }
 
@@ -108,7 +108,7 @@ data read_torken_struct(int n)
 
         if (str[strlen(str) - 1] == '\n')
         {
-            str[strlen(str) - 1] = '\0'; // ¹®ÀÚ¿­ÀÇ ³¡À» ³Î ¹®ÀÚ·Î ´ëÃ¼
+            str[strlen(str) - 1] = '\0'; // ë¬¸ìì—´ì˜ ëì„ ë„ ë¬¸ìë¡œ ëŒ€ì²´
         }
 
         tmp[0] = strtok(str, "|");
@@ -130,16 +130,16 @@ data read_torken_struct(int n)
 }
 /*------------------------------------------------------------------*/
 
-/*-----------------------------------------------------Á¤·Ä ¾Ë°í¸®Áò*/
+/*-----------------------------------------------------ì •ë ¬ ì•Œê³ ë¦¬ì¦˜*/
 void swap(data* a, data* b) {
     data temp = *a;
     *a = *b;
     *b = temp;
 }
-//µ· ³ª´©±â
+//ëˆ ë‚˜ëˆ„ê¸°
 int partition(data list[], int left, int right) {
-    int pivot = list[left].money; // ¸Ç ¿ŞÂÊÀ» ÇÇ¹şÀ¸·Î ¼³Á¤
-    int low = left + 1; // low = ÇÇ¹ş ´ÙÀ½ °ª
+    int pivot = list[left].money; // ë§¨ ì™¼ìª½ì„ í”¼ë²—ìœ¼ë¡œ ì„¤ì •
+    int low = left + 1; // low = í”¼ë²— ë‹¤ìŒ ê°’
     int high = right;
 
     while (low <= high) {
@@ -149,14 +149,12 @@ int partition(data list[], int left, int right) {
             high--;
         if (low <= high) {
             swap(&list[low], &list[high]);
-            low++;
-            high--;
         }
     }
     swap(&list[left], &list[high]);
     return high;
 }
-//µ· Á¤·Ä
+//ëˆ ì •ë ¬
 void money_quick_sort(data list[], int left, int right) {
     if (left < right) {
         int pivot = partition(list, left, right);
@@ -164,7 +162,7 @@ void money_quick_sort(data list[], int left, int right) {
         money_quick_sort(list, pivot + 1, right);
     }
 }
-// ³¯Â¥ ºñ±³ ÇÔ¼ö
+// ë‚ ì§œ ë¹„êµ í•¨ìˆ˜
 int compare_dates(struct date date1, struct date date2) {
     if (date1.year < date2.year)
         return -1;
@@ -181,11 +179,11 @@ int compare_dates(struct date date1, struct date date2) {
             else if (date1.day > date2.day)
                 return 1;
             else
-                return 0; // ³¯Â¥°¡ µ¿ÀÏÇÑ °æ¿ì
+                return 0; // ë‚ ì§œê°€ ë™ì¼í•œ ê²½ìš°
         }
     }
 }
-// ³¯Â¥ ³ª´©±â
+// ë‚ ì§œ ë‚˜ëˆ„ê¸°
 int date_partition(data list[], int left, int right) {
     struct date pivot = list[left].date;
     int low = left + 1;
@@ -209,7 +207,7 @@ int date_partition(data list[], int left, int right) {
     swap(&list[left], &list[high]);
     return high;
 }
-// ³¯Â¥ Á¤·Ä
+// ë‚ ì§œ ì •ë ¬
 void date_quick_sort(data list[], int left, int right) {
     if (left < right) {
         int pivot = date_partition(list, left, right);
@@ -220,113 +218,113 @@ void date_quick_sort(data list[], int left, int right) {
 
 /*------------------------------------------------------------------*/
 
-/*---------------------------------------------------cmdÂÊ ÃÖÁ¾ ÇÔ¼ö*/
+/*---------------------------------------------------cmdìª½ ìµœì¢… í•¨ìˆ˜*/
 void insert_and_modify_2(data d[], int* size) {
     int i, index;
     Date date = { 0 };
 
     /* cmd part ----------------------------------------*/
     gotoxy(64, 0);
-    printf("¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à\n");
+    printf("â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡\n");
     for (i = 1; i <= 20; i++)
     {
         gotoxy(64, i);
-        printf("¡à");
+        printf("â–¡");
         gotoxy(130, i);
-        printf("¡à");
+        printf("â–¡");
     }
     gotoxy(64, 20);
-    printf("¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à\n");
+    printf("â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡\n");
 
     gotoxy(74, 3);
-    printf("³¯Â¥ ÀÔ·Â (ex: yyyy-mm-dd): ");
+    printf("ë‚ ì§œ ì…ë ¥ (ex: yyyy-mm-dd): ");
     scanf("%d-%d-%d", &date.year, &date.month, &date.day);
     /*------------------------------------------------*/
 
-    // Áßº¹ È®ÀÎ ÈÄ ÀÖÀ¸¸é ÇØ´ç µ¥ÀÌÅÍ ¼öÁ¤
+    // ì¤‘ë³µ í™•ì¸ í›„ ìˆìœ¼ë©´ í•´ë‹¹ ë°ì´í„° ìˆ˜ì •
     for (index = 0; index < *size; index++) {
         if (d[index].date.year == date.year && d[index].date.month == date.month && d[index].date.day == date.day) {
             /* cmd part */
             system("cls");
             gotoxy(64, 0);
-            printf("¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à\n");
+            printf("â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡\n");
             for (i = 1; i <= 20; i++)
             {
                 gotoxy(64, i);
-                printf("¡à");
+                printf("â–¡");
                 gotoxy(130, i);
-                printf("¡à");
+                printf("â–¡");
             }
             gotoxy(64, 20);
-            printf("¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à\n");
+            printf("â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡\n");
 
             gotoxy(74, 3);
-            printf("Áßº¹µÈ ³¯Â¥. ÇØ´ç ³¯Â¥¸¦ ¼öÁ¤ÇÏ°Ú½À´Ï´Ù.\n");
+            printf("ì¤‘ë³µëœ ë‚ ì§œ. í•´ë‹¹ ë‚ ì§œë¥¼ ìˆ˜ì •í•˜ê² ìŠµë‹ˆë‹¤.\n");
 
             gotoxy(74, 5);
-            printf("³¯Â¥ ÀÔ·Â (ex: yyyy-mm-dd): ");
+            printf("ë‚ ì§œ ì…ë ¥ (ex: yyyy-mm-dd): ");
             scanf("%d-%d-%d", &d[index].date.year, &d[index].date.month, &d[index].date.day);
 
             gotoxy(74, 7);
-            printf("Áö±Ş ÁöÃâµÈ µ· ÀÔ·Â: ");
+            printf("ì§€ê¸‰ ì§€ì¶œëœ ëˆ ì…ë ¥: ");
             scanf("%d", &d[index].money);
 
             gotoxy(74, 9);
-            printf("Áö±Ş ÁöÃâ³»¿ª ÀÔ·Â : ");
+            printf("ì§€ê¸‰ ì§€ì¶œë‚´ì—­ ì…ë ¥ : ");
             scanf(" %[^\n]", d[index].money_reason);
 
             gotoxy(74, 11);
-            printf("ÀÏÁ¤ ÀÔ·Â: ");
+            printf("ì¼ì • ì…ë ¥: ");
             scanf(" %[^\n]", d[index].str);
 
-            writeDataToFile(d, *size, "ori.txt"); // ÆÄÀÏ¿¡ µ¥ÀÌÅÍ »ğÀÔ
+            writeDataToFile(d, *size, "ori.txt"); // íŒŒì¼ì— ë°ì´í„° ì‚½ì…
 
             return;
         }
     }
 
-    // Áßº¹µÇ´Â µ¥ÀÌÅÍ°¡ ¾ø´Â °æ¿ì »õ µ¥ÀÌÅÍ »ğÀÔ
+    // ì¤‘ë³µë˜ëŠ” ë°ì´í„°ê°€ ì—†ëŠ” ê²½ìš° ìƒˆ ë°ì´í„° ì‚½ì…
     data temp;
     temp.date = date;
 
     /* cmd part */
     gotoxy(74, 5);
-    printf("Áö±Ş ÁöÃâµÈ µ· ÀÔ·Â: ");
+    printf("ì§€ê¸‰ ì§€ì¶œëœ ëˆ ì…ë ¥: ");
     scanf("%d", &temp.money);
 
     gotoxy(74, 7);
-    printf("Áö±Ş ÁöÃâ ³»¿ª ÀÔ·Â: ");
+    printf("ì§€ê¸‰ ì§€ì¶œ ë‚´ì—­ ì…ë ¥: ");
     scanf(" %[^\n]", temp.money_reason);
 
     gotoxy(74, 9);
-    printf("ÀÏÁ¤ ÀÔ·Â: ");
+    printf("ì¼ì • ì…ë ¥: ");
     scanf(" %[^\n]", temp.str);
 
-    // ¹è¿­ d ¸Ç µÚ¿¡ µ¥ÀÌÅÍ »ğÀÔ
+    // ë°°ì—´ d ë§¨ ë’¤ì— ë°ì´í„° ì‚½ì…
     d[*size] = temp;
     (*size)++;
 
-    writeDataToFile(d, *size, "ori.txt"); // ÆÄÀÏ¿¡ µ¥ÀÌÅÍ »ğÀÔ
+    writeDataToFile(d, *size, "ori.txt"); // íŒŒì¼ì— ë°ì´í„° ì‚½ì…
 }
 
-// µ¥ÀÌÅÍ ¼öÁ¤ ÇÔ¼ö
+// ë°ì´í„° ìˆ˜ì • í•¨ìˆ˜
 void modify_3(data d[], int size, const char* filename) {
     char searchDate[STRING_SIZE];
 
     gotoxy(64, 0);
-    printf("¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à\n");
+    printf("â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡\n");
     for (int i = 1; i <= 20; i++)
     {
         gotoxy(64, i);
-        printf("¡à");
+        printf("â–¡");
         gotoxy(130, i);
-        printf("¡à");
+        printf("â–¡");
     }
     gotoxy(64, 20);
-    printf("¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à\n");
+    printf("â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡\n");
 
     gotoxy(74, 3);
-    printf("ÀÏÁ¤À» ¼öÁ¤ÇÒ ³¯Â¥ ÀÔ·Â (ex: yyyy-mm-dd): ");
+    printf("ì¼ì •ì„ ìˆ˜ì •í•  ë‚ ì§œ ì…ë ¥ (ex: yyyy-mm-dd): ");
     scanf("%s", searchDate);
 
     int found = 0;
@@ -338,19 +336,19 @@ void modify_3(data d[], int size, const char* filename) {
         if (strcmp(tempDate, searchDate) == 0) {
 
             gotoxy(74, 5);
-            printf("³¯Â¥ ÀÔ·Â (ex: yyyy-mm-dd): ");
+            printf("ë‚ ì§œ ì…ë ¥ (ex: yyyy-mm-dd): ");
             scanf("%d-%d-%d", &d[i].date.year, &d[i].date.month, &d[i].date.day);
 
             gotoxy(74, 7);
-            printf("Áö±Ş ÁöÃâ ÀÔ·Â: ");
+            printf("ì§€ê¸‰ ì§€ì¶œ ì…ë ¥: ");
             scanf("%d", &d[i].money);
 
             gotoxy(74, 9);
-            printf("Áö±Ş ÁöÃâ ³»¿ª ÀÔ·Â: ");
+            printf("ì§€ê¸‰ ì§€ì¶œ ë‚´ì—­ ì…ë ¥: ");
             scanf(" %[^\n]", d[i].money_reason);
 
             gotoxy(74, 11);
-            printf("ÀÏÁ¤ ÀÔ·Â: ");
+            printf("ì¼ì • ì…ë ¥: ");
             scanf(" %[^\n]", d[i].str);
 
             found = 1;
@@ -360,32 +358,32 @@ void modify_3(data d[], int size, const char* filename) {
 
     if (found) {
         writeDataToFile(d, size, "ori.txt");
-        printf("µ¥ÀÌÅÍ ¼öÁ¤ ÈÄ ÆÄÀÏ¿¡ ÀúÀå ¿Ï·á.\n");
+        printf("ë°ì´í„° ìˆ˜ì • í›„ íŒŒì¼ì— ì €ì¥ ì™„ë£Œ.\n");
     }
     else {
         gotoxy(74, 8);
-        printf("ÀÔ·ÂÇÑ µ¥ÀÌÅÍ´Â Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.\n");
+        printf("ì…ë ¥í•œ ë°ì´í„°ëŠ” ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
     }
 }
 
-// µ¥ÀÌÅÍ »èÁ¦ ÇÔ¼ö
+// ë°ì´í„° ì‚­ì œ í•¨ìˆ˜
 void delete_4(data d[], int* size, const char* filename) {
     char deleteDate[STRING_SIZE];
 
     gotoxy(64, 0);
-    printf("¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à\n");
+    printf("â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡\n");
     for (int i = 1; i <= 20; i++)
     {
         gotoxy(64, i);
-        printf("¡à");
+        printf("â–¡");
         gotoxy(130, i);
-        printf("¡à");
+        printf("â–¡");
     }
     gotoxy(64, 20);
-    printf("¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à¡à\n");
+    printf("â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡\n");
 
     gotoxy(74, 3);
-    printf("ÀÏÁ¤À» »èÁ¦ÇÒ ³¯Â¥ ÀÔ·Â (ex: yyyy-mm-dd): ");
+    printf("ì¼ì •ì„ ì‚­ì œí•  ë‚ ì§œ ì…ë ¥ (ex: yyyy-mm-dd): ");
     scanf("%s", deleteDate);
 
     int found = 0;
@@ -406,10 +404,10 @@ void delete_4(data d[], int* size, const char* filename) {
 
     if (found) {
         writeDataToFile(d, *size, filename);
-        printf("µ¥ÀÌÅÍ »èÁ¦ ÈÄ ÆÄÀÏ¿¡ ÀúÀå ¿Ï·á\n");
+        printf("ë°ì´í„° ì‚­ì œ í›„ íŒŒì¼ì— ì €ì¥ ì™„ë£Œ\n");
     }
     else {
-        printf("ÀÔ·ÂÇÑ µ¥ÀÌÅÍ´Â Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.\n");
+        printf("ì…ë ¥í•œ ë°ì´í„°ëŠ” ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
     }
 }
 
